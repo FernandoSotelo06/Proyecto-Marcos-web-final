@@ -1,0 +1,50 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this template
+*/
+/* 
+    Created on : 15 oct. 2024, 22:23:40
+    Author     : Fernando
+*/
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body{
+    font-family: "Kanit", sans-serif;
+    background: rgb(252,215,193);
+    background: radial-gradient(circle, rgba(252,215,193,1) 0%, rgba(250,158,158,1) 100%);
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+.card{
+    background-image: url(img/fondo-marcos-web.jpg);
+    background-repeat: no-repeat; 
+    background-attachment: fixed;
+    background-size: 100% auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+img{
+  width: 33%;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.btn{
+    width: 15%;
+    height: 15%;
+    padding: 20px;
+    background-color: lightsalmon;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    text-align: center;
+}
+.btn:hover{
+    background-color: salmon;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+.btn:active{
+    background-color: salmon;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}

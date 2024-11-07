@@ -61,9 +61,9 @@ public class ClientesDAO {
         return r;
     }
     
-    public Clientes listarClientes(int id){
+    public Clientes listarClientesId(int idCliente){
     Clientes cli = new Clientes();
-    String sql="select * from cliente where IdCliente="+id;
+    String sql="select * from cliente where IdCliente="+idCliente;
         try {
             con=cn.Conexion();
             ps=con.prepareStatement(sql);
@@ -78,4 +78,31 @@ public class ClientesDAO {
         }
         return cli;
     }
+        public int actualizarCli(Clientes cli){
+            String sql="update cliente set Dni=?, Nombres=?, Direccion=?, Estado=? where IdCliente=?";
+
+        try {
+            con=cn.Conexion();
+            ps=con.prepareStatement(sql);
+            ps.setString(1, cli.getDniCliente());
+            ps.setString(2, cli.getNomCliente());
+            ps.setString(3, cli.getDirceccion());
+            ps.setString(4, cli.getEstado());
+            ps.setInt(5, cli.getIdCliente());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+        }
+        return r;
+    }
+        public void deleteCli(int idCliente){
+        String sql="delete from cliente where IdCliente="+idCliente;
+        try {
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+        }
+    }
+    
+    
 }

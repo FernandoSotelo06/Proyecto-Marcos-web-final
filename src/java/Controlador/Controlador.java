@@ -28,6 +28,7 @@ public class Controlador extends HttpServlet {
     ClientesDAO clidao = new ClientesDAO();
 
     int ide;
+    int ideCli;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -93,47 +94,45 @@ public class Controlador extends HttpServlet {
 
         if (menu.equals("Clientes")) {
             switch (accion) {
-                case "Listar":
+                case "ListarCli":
                     List lista = clidao.listarCli();
                     request.setAttribute("clientes", lista);
                     break;
                 case "Agregar":
                     String dni = request.getParameter("txtDniCli");
                     String nom = request.getParameter("txtNombresCli");
-                    String dir = request.getParameter("txtDireccionCli");
+                    String dirc = request.getParameter("txtDireccionCli");
                     String est = request.getParameter("txtEstadoCli");
                     cli.setDniCliente(dni);
                     cli.setNomCliente(nom);
-                    cli.setDirceccion(dir);
+                    cli.setDirceccion(dirc);
                     cli.setEstado(est);
                     clidao.agregar(cli);
-                    request.getRequestDispatcher("Controlador?menu=Clientes&accion=Listar").forward(request, response);
+                    request.getRequestDispatcher("Controlador?menu=Clientes&accion=ListarCli").forward(request, response);
                     break;
                 case "Editar":
-                    ide = Integer.parseInt(request.getParameter("id"));
-                    Empleado e = edao.listarId(ide);
-                    request.setAttribute("empleado", e);
-                    request.getRequestDispatcher("Controlador?menu=Clientes&accion=Listar").forward(request, response);
+                    ideCli = Integer.parseInt(request.getParameter("idCliente"));
+                    Clientes c = clidao.listarClientesId(ideCli);
+                    request.setAttribute("cliente", c);
+                    request.getRequestDispatcher("Controlador?menu=Clientes&accion=ListarCli").forward(request, response);
                     break;
                 case "Actualizar":
-                    String dni1 = request.getParameter("txtDni");
-                    String nom1 = request.getParameter("txtNombres");
-                    String tel1 = request.getParameter("txtTel");
-                    String est1 = request.getParameter("txtEstado");
-                    String user1 = request.getParameter("txtUsuario");
-                    em.setDni(dni1);
-                    em.setNom(nom1);
-                    em.setTel(tel1);
-                    em.setEstado(est1);
-                    em.setUser(user1);
-                    em.setId(ide);
-                    edao.actualizar(em);
-                    request.getRequestDispatcher("Controlador?menu=Clientes&accion=Listar").forward(request, response);
+                    String dni2 = request.getParameter("txtDniCli");
+                    String nom2 = request.getParameter("txtNombresCli");
+                    String dirc2 = request.getParameter("txtDireccionCli");
+                    String est2 = request.getParameter("txtEstadoCli");
+                    cli.setDniCliente(dni2);
+                    cli.setNomCliente(nom2);
+                    cli.setDirceccion(dirc2);
+                    cli.setEstado(est2);
+                    cli.setIdCliente(ideCli);
+                    clidao.actualizarCli(cli);
+                    request.getRequestDispatcher("Controlador?menu=Clientes&accion=ListarCli").forward(request, response);
                     break;
                 case "Delete":
-                    ide = Integer.parseInt(request.getParameter("id"));
-                    edao.delete(ide);
-                    request.getRequestDispatcher("Controlador?menu=Clientes&accion=Listar").forward(request, response);
+                    ideCli = Integer.parseInt(request.getParameter("idCliente"));
+                    clidao.deleteCli(ideCli);
+                    request.getRequestDispatcher("Controlador?menu=Clientes&accion=ListarCli").forward(request, response);
                     break;
                 default:
                     throw new AssertionError();

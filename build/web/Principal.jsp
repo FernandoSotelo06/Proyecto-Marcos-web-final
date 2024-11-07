@@ -27,7 +27,7 @@
                         <a class="nav-link" href="Controlador?menu=Empleado&accion=Listar" target="myFrame">Empleado</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Controlador?menu=Clientes" target="myFrame">Clientes</a>
+                        <a class="nav-link" href="Controlador?menu=Clientes&accion=ListarCli" target="myFrame">Clientes</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="Controlador?menu=NuevaVenta" target="myFrame">Nueva venta</a>

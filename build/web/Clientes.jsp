@@ -21,21 +21,20 @@
                 <form action="Controlador?menu=Clientes" method="POST">
                     <div class="form-group">
                         <label>Dni</label>
-                        <input type="text" value="${clientes.getDniCliente()}" name="txtDniCli" class="form-control">
+                        <input type="text" value="${cliente.getDniCliente()}" name="txtDniCli" class="form-control">
                     </div>
                     <div class="form-group">
                         <label>Nombres</label>
-                        <input type="text" value="${clientes.getNomCliente()}" name="txtNombresCli" class="form-control">
+                        <input type="text" value="${cliente.getNomCliente()}" name="txtNombresCli" class="form-control">
                     </div>
                     <div class="form-group">
                         <label>Direccion</label>
-                        <input type="text" value="${clientes.getDirceccion()}" name="txtDireccionCli" class="form-control">
+                        <input type="text" value="${cliente.getDirceccion()}" name="txtDireccionCli" class="form-control">
                     </div>
                     <div class="form-group">
                         <label>Estado</label>
-                        <input type="text" value="${clientes.getEstado}" name="txtEstadoCli" class="form-control">
+                        <input type="text" value="${cliente.getEstado()}" name="txtEstadoCli" class="form-control">
                     </div>
-                    
                     <input type="submit" name="accion" value="Agregar" class="btn btn-info">
                     <input type="submit" name="accion" value="Actualizar" class="btn btn-success">
                 </form>
@@ -61,8 +60,8 @@
                         <td>${cli.getDirceccion()}</td>
                         <td>${cli.getEstado()}</td>
                         <td>
-                            <a class="btn-info" style="border-radius: 5px; margin: 10px;  text-decoration: none" href="Controlador?menu=Clientes&accion=Editar&id=${cli.getIdCliente()}">Editar</a>
-                            <a class="btn-secondary" style="border-radius: 5px; margin: 10px; text-decoration: none" href="Controlador?menu=Clientes&accion=Delete&id=${cli.getIdCliente()}">Delete</a>
+                            <a class="btn-info" style="border-radius: 5px; margin: 10px;  text-decoration: none" href="Controlador?menu=Clientes&accion=Editar&idCliente=${cli.getIdCliente()}">Editar</a>
+                            <a class="btn-secondary" style="border-radius: 5px; margin: 10px; text-decoration: none" href="Controlador?menu=Clientes&accion=Delete&idCliente=${cli.getIdCliente()}">Delete</a>
                         </td>
                     </tr>                       
                     </c:forEach>

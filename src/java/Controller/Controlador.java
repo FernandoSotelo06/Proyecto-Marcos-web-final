@@ -2,12 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controlador;
+package Controller;
 
-import Modelo.Clientes;
-import Modelo.ClientesDAO;
-import Modelo.Empleado;
-import Modelo.EmpleadoDAO;
+import ModeloDTO.Clientes;
+import ModeloDAO.ClientesDAO;
+import ModeloDTO.Empleado;
+import ModeloDAO.EmpleadoDAO;
+import ModeloDAO.ProductoDAO;
+import ModeloDTO.Producto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,9 +28,13 @@ public class Controlador extends HttpServlet {
     EmpleadoDAO edao = new EmpleadoDAO();
     Clientes cli = new Clientes();
     ClientesDAO clidao = new ClientesDAO();
+    Producto p = new Producto();
+    ProductoDAO pdao = new ProductoDAO();
+
 
     int ide;
     int ideCli;
+    int idp;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -140,6 +146,54 @@ public class Controlador extends HttpServlet {
         }
         if (menu.equals("Clientes")) {
             request.getRequestDispatcher("Clientes.jsp").forward(request, response);
+        }
+        
+        if (menu.equals("Producto")) {
+            switch (accion) {
+                case "ListarPro":
+                    List productos = pdao.listarProducto();
+                    request.setAttribute("productos", productos);
+                    break;
+                case "Agregar":
+                    String nomPro = request.getParameter("txtNombreProducto");
+                    double pre = Double.parseDouble(request.getParameter("txtPrecioProducto"));
+                    int st = Integer.parseInt(request.getParameter("txtStockProducto"));
+                    String est = request.getParameter("txtEstadoProducto");
+                    p.setNomProducto(nomPro);
+                    p.setPreProducto(pre);
+                    p.setStockProducto(st);
+                    p.setEstadoProducto(est);
+                    pdao.agregarProducto(p);
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=ListarPro").forward(request, response);
+                    break;
+                case "Editar":
+                    idp = Integer.parseInt(request.getParameter("idProducto"));
+                    Producto pr = pdao.listarIdProducto(idp);
+                    request.setAttribute("producto", pr);
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=ListarPro").forward(request, response);
+                    break;
+                case "Actualizar":
+                    String nomPro1 = request.getParameter("txtNombreProducto");
+                    double pre1 = Double.parseDouble(request.getParameter("txtPrecioProducto"));
+                    int st1 = Integer.parseInt(request.getParameter("txtStockProducto"));
+                    String est1 = request.getParameter("txtEstadoProducto");
+                    p.setNomProducto(nomPro1);
+                    p.setPreProducto(pre1);
+                    p.setStockProducto(st1);
+                    p.setEstadoProducto(est1);
+                    p.setIdProducto(idp);
+                    pdao.actualizarProducto(p);
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=ListarPro").forward(request, response);
+                    break;
+                case "Delete":
+                    idp = Integer.parseInt(request.getParameter("idProducto"));
+                    pdao.deleteProducto(idp);
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=ListarPro").forward(request, response);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        
         }
         if (menu.equals("Producto")) {
             request.getRequestDispatcher("Producto.jsp").forward(request, response);

@@ -21,7 +21,7 @@
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" style="" href="Controlador?menu=Producto" target="myFrame">Producto</a>
+                        <a class="nav-link" style="" href="Controlador?menu=Producto&accion=ListarPro" target="myFrame">Producto</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="Controlador?menu=Empleado&accion=Listar" target="myFrame">Empleado</a>

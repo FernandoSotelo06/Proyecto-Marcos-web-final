@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Modelo;
+package ModeloDAO;
 
+import ModeloDTO.Clientes;
 import config.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,6 +43,7 @@ public class ClientesDAO {
                 listaCli.add(cli);
             }
         } catch (SQLException e) {
+            System.out.println("Error:" + e);
         }
         return listaCli;  
 }
@@ -57,6 +59,7 @@ public class ClientesDAO {
             ps.setString(4, cli.getEstado());
             ps.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("Error:" + e);
         }
         return r;
     }
@@ -75,6 +78,7 @@ public class ClientesDAO {
                 cli.setEstado(rs.getString(5));
             }
         } catch (SQLException e) {
+            System.out.println("Error:" + e);
         }
         return cli;
     }
@@ -91,6 +95,7 @@ public class ClientesDAO {
             ps.setInt(5, cli.getIdCliente());
             ps.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("Error:" + e);
         }
         return r;
     }
@@ -101,6 +106,7 @@ public class ClientesDAO {
             ps = con.prepareStatement(sql);
             ps.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("Error:" + e);
         }
     }
     

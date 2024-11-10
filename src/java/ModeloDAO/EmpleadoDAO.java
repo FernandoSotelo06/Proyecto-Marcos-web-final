@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Modelo;
+package ModeloDAO;
 
+import ModeloDTO.Empleado;
 import config.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -62,6 +63,7 @@ public class EmpleadoDAO {
                 lista.add(em);
             }
         } catch (SQLException e) {
+            System.out.println("Error:" + e);
         }
         return lista;
     }
@@ -77,6 +79,7 @@ public class EmpleadoDAO {
             ps.setString(5, em.getUser());
             ps.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("Error:" + e);
         }
         return r;
     }
@@ -95,6 +98,7 @@ public class EmpleadoDAO {
                 emp.setUser(rs.getString(6));
             }
         } catch (SQLException e) {
+            System.out.println("Error:" + e);
         }
         return emp;
     }
@@ -111,6 +115,7 @@ public class EmpleadoDAO {
             ps.setInt(6, em.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("Error:" + e);
         }
         return r;
     }
@@ -121,6 +126,7 @@ public class EmpleadoDAO {
             ps = con.prepareStatement(sql);
             ps.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("Error:" + e);
         }
     }
     

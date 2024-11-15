@@ -46,7 +46,7 @@
             </div>
             <div class="col-sm-7">
                 <table class="table table-hover" style="background-image: url(img/fondo-marcos-web.jpg); background-repeat: no-repeat;  background-attachment: fixed; background-size: 100% auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
-                    <thead>
+                    <thead class="thead-light">
                         <tr>
                             <th>ID</th>
                             <th>DNI</th>

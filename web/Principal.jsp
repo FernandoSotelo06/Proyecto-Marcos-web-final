@@ -43,7 +43,7 @@
                                 <img src="img/img-user.png" alt="60" with="60"/>
                             </a>
                             <a class="dropdown-item" href="#">${usuario.getUser()}</a>
-                            <a class="dropdown-item" href="#">userio@gmail.com</a>
+                            <a class="dropdown-item" href="#">${usuario.getUser()}@gmail.com</a>
                             <div class="dropdown-divider">content</div>
                             <form action="Validar" method="POST">
                                 <button name="accion" value="Salir" class="dropdown-item" href="#">Salir</button>
@@ -53,7 +53,7 @@
                 </div>
             </div>
         </nav>
-        <div class="m-4" style="height: 550px;">
+        <div class="m-3" style="height: 1000px;">
             <iframe name="myFrame" style="height: 100%; width:100%; border: none;"></iframe>
         </div>
 

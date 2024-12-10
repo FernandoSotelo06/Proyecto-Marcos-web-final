@@ -9,13 +9,18 @@ import ModeloDAO.ClientesDAO;
 import ModeloDTO.Empleado;
 import ModeloDAO.EmpleadoDAO;
 import ModeloDAO.ProductoDAO;
+import ModeloDAO.VentaDAO;
 import ModeloDTO.Producto;
+import ModeloDTO.Venta;
+import config.GenerarSerie;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,16 +35,29 @@ public class Controlador extends HttpServlet {
     ClientesDAO clidao = new ClientesDAO();
     Producto p = new Producto();
     ProductoDAO pdao = new ProductoDAO();
-
+    Venta v = new Venta();
+    VentaDAO vdao = new VentaDAO();
 
     int ide;
     int ideCli;
     int idp;
 
+    List<Venta> lista = new ArrayList<>();
+    int item;
+    int cod;
+    String descripcion;
+    double precio;
+    int cant;
+    double subtotal;
+    double totalPagar;
+    String numeroserie = "";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String menu = request.getParameter("menu");
         String accion = request.getParameter("accion");
+        HttpSession session = request.getSession();
+        Empleado usuario = (Empleado) session.getAttribute("usuario");
         if (menu.equals("Principal")) {
             request.getRequestDispatcher("Principal.jsp").forward(request, response);
         }
@@ -147,7 +165,7 @@ public class Controlador extends HttpServlet {
         if (menu.equals("Clientes")) {
             request.getRequestDispatcher("Clientes.jsp").forward(request, response);
         }
-        
+
         if (menu.equals("Producto")) {
             switch (accion) {
                 case "ListarPro":
@@ -193,12 +211,169 @@ public class Controlador extends HttpServlet {
                 default:
                     throw new AssertionError();
             }
-        
+
         }
         if (menu.equals("Producto")) {
             request.getRequestDispatcher("Producto.jsp").forward(request, response);
         }
         if (menu.equals("NuevaVenta")) {
+            switch (accion) {
+                case "BuscarCliente":
+                    String DniCliente = request.getParameter("codigocliente");
+                    cli.setDniCliente(DniCliente);
+                    cli = clidao.buscar(DniCliente);
+                    request.setAttribute("cli", cli);
+                    session.setAttribute("usuario", usuario);
+                    request.setAttribute("nserie", numeroserie);
+                    request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
+                    break;
+                case "BuscarProducto":
+                    int idProducto = Integer.parseInt(request.getParameter("codigoproducto"));
+                    p = pdao.listarIdProducto(idProducto);
+                    request.setAttribute("cli", cli);
+                    request.setAttribute("producto", p);
+                    request.setAttribute("lista", lista);
+                    request.setAttribute("totalpagar", totalPagar);
+                    request.setAttribute("nserie", numeroserie);
+                    session.setAttribute("usuario", usuario);
+                    request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
+                    break;
+                case "Agregar":
+                    request.setAttribute("nserie", numeroserie);
+                    request.setAttribute("cli", cli);
+                    totalPagar = 0.0;
+                    item = item + 1;
+                    cod = p.getIdProducto();
+                    descripcion = request.getParameter("nomproducto");
+                    precio = Double.parseDouble(request.getParameter("precio"));
+                    cant = Integer.parseInt(request.getParameter("cant"));
+                    subtotal = precio * cant;
+                    v = new Venta();
+                    v.setItem(item);
+                    v.setIdproducto(cod);
+                    v.setDescripcionP(descripcion);
+                    v.setPrecio(precio);
+                    v.setCantidad(cant);
+                    v.setSubtotal(subtotal);
+                    boolean exist = false;
+                    int count = 0;
+                    int position = 0;
+                    for (Venta venta : lista) {
+                        if (venta.getIdproducto().equals(cod)) {
+                            exist = true;
+                            position = count;
+                        }
+                        count++;
+                    }
+                    if (exist) {
+                        lista.get(position).setCantidad(lista.get(position).getCantidad() + 1);
+                    } else {
+                        lista.add(v);
+                    }
+                    for (int i = 0; i < lista.size(); i++) {
+                        totalPagar = totalPagar + lista.get(i).getSubtotal();
+                    }
+                    request.setAttribute("totalpagar", totalPagar);
+                    request.setAttribute("lista", lista);
+                    session.setAttribute("usuario", usuario);
+                    request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
+                    break;
+                case "delete":
+                    int idpd = Integer.parseInt(request.getParameter("id"));
+                    for (int i = 0; i < lista.size(); i++) {
+                        if (lista.get(i).getIdproducto().equals(idpd)) {
+                            lista.remove(i);
+                        }
+                    }
+                    totalPagar = 0.0;
+                    for (int i = 0; i < lista.size(); i++) {
+                        totalPagar = totalPagar + lista.get(i).getSubtotal();
+                    }
+                    request.setAttribute("nserie", numeroserie);
+                    request.setAttribute("cli", cli);
+                    request.setAttribute("totalpagar", totalPagar);
+                    request.setAttribute("lista", lista);
+                    session.setAttribute("usuario", usuario);
+                    request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
+                    break;
+                case "updateCant":
+                    try {
+                    int idpc = Integer.parseInt(request.getParameter("id"));
+                    int canti = Integer.parseInt(request.getParameter("cantidad"));
+                    if (idpc != 0 && canti != 0) {
+                        for (int i = 0; i < lista.size(); i++) {
+                            if (lista.get(i).getIdproducto().equals(idpc)) {
+                                lista.get(i).setCantidad(canti);
+                            }
+                        }
+                    }
+                    totalPagar = 0.0;
+                    for (int i = 0; i < lista.size(); i++) {
+                        totalPagar = totalPagar + lista.get(i).getSubtotal();
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Error:" + e);
+                }
+                request.setAttribute("nserie", numeroserie);
+                request.setAttribute("cli", cli);
+                request.setAttribute("totalpagar", totalPagar);
+                request.setAttribute("lista", lista);
+                session.setAttribute("usuario", usuario);
+                request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
+                break;
+                case "GenerarVenta":
+                    for (int i = 0; i < lista.size(); i++) {
+                        Producto pr = new Producto();
+                        int cantidad = lista.get(i).getCantidad();
+                        int idproducto = lista.get(i).getIdproducto();
+                        ProductoDAO aO = new ProductoDAO();
+                        pr = aO.buscar(idproducto);
+                        int sac = pr.getStockProducto() - cantidad;
+                        aO.actualizarStock(idproducto, sac);
+                    }
+                    v.setIdcliente(cli.getIdCliente());
+                    v.setIdempleado(2);
+                    v.setNumserie(numeroserie);
+                    v.setFecha("2024-08-12");
+                    v.setMonto(totalPagar);
+                    v.setEstado("1");
+                    vdao.guardarVenta(v);
+
+                    int idv = Integer.parseInt(vdao.IdVentas());
+                    for (int i = 0; i < lista.size(); i++) {
+                        v = new Venta();
+                        v.setId(idv);
+                        v.setIdproducto(lista.get(i).getIdproducto());
+                        v.setCantidad(lista.get(i).getCantidad());
+                        v.setPrecio(lista.get(i).getPrecio());
+                        vdao.guardarDetalleventas(v);
+                    }
+
+                    break;
+
+                default:
+                    v = new Venta();
+                    lista = new ArrayList<>();
+                    item = 0;
+                    totalPagar = 0.0;
+                    numeroserie = vdao.GenerarSerie();
+                    numeroserie = vdao.GenerarSerie();
+                    if (numeroserie == null) {
+                        numeroserie = "00000001";
+                        request.setAttribute("nserie", numeroserie);
+                    } else {
+                        int incrementar = Integer.parseInt(numeroserie);
+                        GenerarSerie gs = new GenerarSerie();
+                        numeroserie = gs.NumeroSerie(incrementar);
+                        request.setAttribute("nserie", numeroserie);
+                    }
+                    session.setAttribute("usuario", usuario);
+                    request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
+                    request.setAttribute("errorMensaje", "Acción no válida: " + accion);
+                    break;
+            }
+
+            // Redirige a la página de "RegistrarVenta.jsp" independientemente del resultado
             request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
         }
 

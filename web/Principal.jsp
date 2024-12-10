@@ -30,7 +30,7 @@
                         <a class="nav-link" href="Controlador?menu=Clientes&accion=ListarCli" target="myFrame">Clientes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Controlador?menu=NuevaVenta" target="myFrame">Nueva venta</a>
+                        <a class="nav-link" href="Controlador?menu=NuevaVenta&accion=default" target="myFrame">Nueva venta</a>
                     </li>
                 </ul>
                 <div class="ml-auto">

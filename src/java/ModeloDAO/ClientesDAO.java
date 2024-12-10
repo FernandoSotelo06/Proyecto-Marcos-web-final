@@ -24,6 +24,30 @@ public class ClientesDAO {
     ResultSet rs;
     int r;
     
+    public Clientes buscar(String DniCliente) {
+        Clientes cli = new Clientes();
+        String sql = "Select * from cliente where Dni=" + DniCliente;
+        try {
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                cli.setIdCliente(rs.getInt(1));
+                cli.setDniCliente(rs.getString(2));
+                cli.setNomCliente(rs.getString(3));
+                cli.setDirceccion(rs.getString(4));
+                cli.setEstado(rs.getString(5));
+            }
+            ps.close();
+            con.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Error:" + e);
+        }
+
+        return cli;
+    }
+    
    //Operaciones CRUD
    
     public List listarCli() {
